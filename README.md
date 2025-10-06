@@ -1,3 +1,5 @@
+This project was developed under the Central Water Commission under the title **Flood Forecasting and Meteorological Analysis for Water Resources Management using Machine Learning**.
+
 ## 20-Hour Water Level Forecasting using XGBoost and LSTM Models
 
 This project develops and compares machine learning models for forecasting water levels at the Rewaghat station 20 hours in advance. The primary recommended model is an optimized XGBoost regressor, which is benchmarked against three distinct LSTM architectures. The models are trained on historical gauge data from multiple base stations (Chatia, Rewaghat, Dumariaghat) and aggregated rainfall records.
