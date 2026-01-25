@@ -12,9 +12,17 @@ The final XGBoost model is recommended for operational use due to its high accur
 
 * `XGBoostmodel.ipynb`: End-to-end workflow for the final, recommended XGBoost model. Includes feature engineering, training, and evaluation.
 * `LSTMseq-to-vec.ipynb`: Implementation of an LSTM Sequence-to-Vector (Single-Step) model that predicts the 20th hour directly.
-* `LSTM_seq-to-vector_multistep.ipynb`: An LSTM Sequence-to-Vector (Multi-Step) model that predicts all 20 future hours simultaneously. This architecture replicates the CWC's original methodology.
+* `LSTM_seq-to-vector_multistep.ipynb.ipynb`: An LSTM Sequence-to-Vector (Multi-Step) model that predicts all 20 future hours simultaneously. This architecture replicates the CWC's original methodology.
 * `LSTMseq-toseq.ipynb`: A true Sequence-to-Sequence (Encoder-Decoder) LSTM model that generates predictions autoregressively.
-* Excel data files: `Chatia_*.xlsx`, `Rewaghat_*.xlsx`, `Dumariaghat_data.xlsx`, `rainfall_data.xlsx`.
+* `feature_engineering.py`: Utility script for creating features from raw data.
+* `main.py`: Main script entry point.
+* `testing_only.ipynb`: Notebook for evaluating the trained XGBoost model on the separate test dataset.
+* Excel data files: `Chatia_train.xlsx`, `Chatia_test.xlsx`, `Rewaghat_train.xlsx`, `Rewaghat_test.xlsx`, `Dumariaghat_data.xlsx`, `rainfall_data.xlsx`.
+* `pyproject.toml`: Project dependencies configuration for uv.
+* `uv.lock`: Dependency lock file for uv.
+* `.gitignore`: Git ignore rules.
+* `.python-version`: Python version specification.
+* `LICENSE`: Project license.
 * `README.md`: This project overview.
 
 ---
@@ -46,7 +54,7 @@ Three LSTM architectures were developed to benchmark against the XGBoost solutio
 
 ### 📊 Performance Summary
 
-All models were evaluated on the same test set (the most recent year of data). The results confirm that the XGBoost model performs on par with the best LSTM variants while being significantly faster to train.
+All models were evaluated on the same test set (the most recent year of data from training). The results confirm that the XGBoost model performs on par with the best LSTM variants while being significantly faster to train.
 
 | Model Architecture | Full Year Accuracy | Monsoon (Jun-Oct) Accuracy | Dry Season (Nov-May) Accuracy | Notes |
 | :--- | :---: | :---: | :---: | :--- |
@@ -54,6 +62,8 @@ All models were evaluated on the same test set (the most recent year of data). T
 | LSTM Seq-to-Vec (Single) | 88.76% | 74.92% | 98.81% | Predicts only the 20th hour. Highest accuracy. |
 | LSTM Seq-to-Vec (Multi) | 88.70% | 74.75% | 98.83% | Replicates CWC's original method. |
 | LSTM Seq-to-Seq (Auto) | 85.63% | 68.23% | 98.26% | Weakest performer, prone to error propagation. |
+
+**Note**: The above accuracies are from evaluations on the time-split test set within the training notebooks. A separate evaluation on the held-out test files (`*_test.xlsx`) using `testing_only.ipynb` shows the XGBoost model achieving 86.35% full-year accuracy. LSTM models have not been re-evaluated on this separate test set.
 
 **Analysis**:
 * Forecasting during the non-monsoon "Dry Season" is highly accurate (~98%) across all top models.
@@ -68,6 +78,8 @@ A time-ordered split is used across all notebooks to prevent data leakage and si
 * **Train Set**: All data except the last 2 years.
 * **Validation Set**: The second-to-last year of data.
 * **Test Set**: The most recent 1 year of data.
+
+Separate test files (`*_test.xlsx`) are provided for additional evaluation.
 
 ---
 
@@ -98,3 +110,15 @@ python -m venv .venv
 source .venv/bin/activate  # On Linux/macOS
 # source .venv/Scripts/activate # On Windows
 pip install pandas numpy xgboost scikit-learn matplotlib joblib openpyxl torch
+```
+
+#### Run the Project
+```bash
+# Example: Run feature engineering
+python feature_engineering.py
+
+# Or run the main script
+python main.py
+```
+
+For detailed workflows, open the Jupyter notebooks in your environment.
